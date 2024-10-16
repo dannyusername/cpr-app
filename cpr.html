@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPR Training App</title>
+    <!-- <style> -->
+    <!--     body { -->
+    <!--         font-family: Arial, sans-serif; -->
+    <!--         background-color: #f7f7f7; -->
+    <!--         text-align: center; -->
+    <!--         padding: 20px; -->
+    <!--     } -->
+    <!--     .container { -->
+    <!--         max-width: 800px; -->
+    <!--         margin: auto; -->
+    <!--         background-color: #fff; -->
+    <!--         padding: 20px; -->
+    <!--         border-radius: 10px; -->
+    <!--         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); -->
+    <!--     } -->
+    <!--     h1 { -->
+    <!--         color: #d32f2f; -->
+    <!--     } -->
+    <!--     .menu { -->
+    <!--         list-style-type: none; -->
+    <!--         padding: 0; -->
+    <!--     } -->
+    <!--     .menu li { -->
+    <!--         margin: 15px 0; -->
+    <!--     } -->
+    <!--     .menu a { -->
+    <!--         text-decoration: none; -->
+    <!--         background-color: #0288d1; -->
+    <!--         color: white; -->
+    <!--         padding: 15px 30px; -->
+    <!--         border-radius: 5px; -->
+    <!--         font-size: 18px; -->
+    <!--     } -->
+    <!--     .menu a:hover { -->
+    <!--         background-color: #0277bd; -->
+    <!--     } -->
+    <!--     .info-section, .quiz-section, .rhythm-section, .auth-section { -->
+    <!--         display: none; -->
+    <!--     } -->
+    <!-- </style> -->
+</head>
+<body>
+
+    <div class="container">
+        <h1>CPR Training App</h1>
+        <ul class="menu">
+            <li><a href="#" onclick="showSection('info-section')">CPR Information Refresher</a></li>
+            <li><a href="#" onclick="showSection('quiz-section')">Take CPR Quiz</a></li>
+            <li><a href="#" onclick="showSection('rhythm-section')">CPR Rhythm Practice</a></li>
+            <li><a href="#" onclick="showSection('auth-section')">Create Account / Sign In</a></li>
+        </ul>
+
+        <!-- CPR Information Refresher Section -->
+        <div id="info-section" class="info-section">
+            <h2>CPR Information Refresher</h2>
+            <p>Learn the basics of CPR and stay updated with the latest guidelines.</p>
+            <ul>
+                <li>30 chest compressions followed by 2 rescue breaths</li>
+                <li>Compressions should be 100-120 per minute</li>
+                <li>Push hard and fast in the center of the chest</li>
+                <!-- Add more informational content here -->
+            </ul>
+        </div>
+
+        <!-- CPR Rhythm Practice Section -->
+        <div id="rhythm-section" class="rhythm-section">
+            <h2>CPR Rhythm Practice</h2>
+            <p>Press the button following the rhythm to simulate CPR compressions.</p>
+            <button id="start-practice" onclick="startRhythmPractice()">Start Rhythm Practice</button>
+            <p id="rhythm-score"></p>
+        </div>
+
+        <!-- Account Creation / Sign In Section -->
+        <div id="auth-section" class="auth-section">
+            <h2>Create Account / Sign In</h2>
+            <form id="auth-form" action="/auth/signup" method="POST">
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- <script> -->
+    <!--     // Show the selected section -->
+    <!--     function showSection(sectionId) { -->
+    <!--         document.querySelectorAll('.info-section, .quiz-section, .rhythm-section, .auth-section').forEach(function(section) { -->
+    <!--             section.style.display = 'none'; -->
+    <!--         }); -->
+    <!--         document.getElementById(sectionId).style.display = 'block'; -->
+    <!--     } -->
+    <!---->
+    <!--     // Simulate submitting a quiz -->
+    <!--     function submitQuiz() { -->
+    <!--         var score = 0; -->
+    <!--         var q1 = document.querySelector('input[name="q1"]:checked'); -->
+    <!--         var q2 = document.querySelector('input[name="q2"]:checked'); -->
+    <!--         if (q1 && q1.value === "100-120") score++; -->
+    <!--         if (q2 && q2.value === "30:2") score++; -->
+    <!---->
+    <!--         document.getElementById('quiz-result').textContent = "You scored " + score + "/2!"; -->
+    <!--         // Here, you could send the score to the server for storage -->
+    <!--     } -->
+    <!---->
+    <!--     // Simulate rhythm practice -->
+    <!--     function startRhythmPractice() { -->
+    <!--         var score = Math.floor(Math.random() * 100) + 1; // Simulate a score -->
+    <!--         document.getElementById('rhythm-score').textContent = "Your rhythm practice score is " + score; -->
+    <!--         // Here, you could send the score to the server for storage -->
+    <!--     } -->
+    <!-- </script> -->
+
+</body>
+</html>
+
