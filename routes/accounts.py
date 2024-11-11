@@ -12,7 +12,7 @@ def get_db_connection():
     return conn
 
 # Route for user registration
-@app.route('/signup', methods=['GET', 'POST'])
+@accounts.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -36,7 +36,7 @@ def signup():
     return render_template('signup.html')
 
 # Route for user login
-@app.route('/login', methods=['GET', 'POST'])
+@accounts.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -57,10 +57,6 @@ def login():
     return render_template('login.html')
 
 # Home route (protected content)
-@app.route('/home')
+@accounts.route('/home')
 def home():
     return "Welcome to your dashboard!"
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
