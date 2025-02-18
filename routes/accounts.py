@@ -7,7 +7,7 @@ accounts = Blueprint('accounts', __name__)
 
 # Helper function to connect to the database
 def get_db_connection():
-    conn = sqlite3.connect("../cpr-db.sqlite")
+    conn = sqlite3.connect("cpr-db.sqlite")
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -28,7 +28,7 @@ def signup():
             cursor.execute('INSERT INTO user_data (username, password) VALUES (?, ?)', (username, hashed_password))
             conn.commit()
             flash("Account created successfully!", "success")
-            return redirect(url_for('login'))
+            return redirect(url_for('accounts.login'))
         except sqlite3.IntegrityError:
             flash("Username already exists. Please choose another.", "error")
         finally:
