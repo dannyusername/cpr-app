@@ -3,6 +3,8 @@ from flask import Flask, Blueprint, request, redirect, url_for, flash, render_te
 import sqlite3
 import bcrypt
 
+from routes.dash import dash
+
 accounts = Blueprint('accounts', __name__)
 
 # Helper function to connect to the database
@@ -51,12 +53,7 @@ def login():
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             flash("Login successful!", "success")
-            return redirect(url_for('home'))
+            return redirect(url_for('dash.home'))
         else:
             flash("Invalid username or password.", "error")
     return render_template('login.html')
-
-# Home route (protected content)
-@accounts.route('/home')
-def home():
-    return "Welcome to your dashboard!"
