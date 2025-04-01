@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Timing Practice</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="title"><header><b>Metronome</b></header></div>
+        <button id="choice">Change Sound Type: <span id="stype">Tap</span></button>
+        <button id="play-button">Start
+            <div class="play"></div>
+        </button>
+        <p>
+            <img id="indicator" src="./heartAsset.png" style="width: 20vw"/> <br>
+            <header><b>Timing Practice</b></header>
+            <button id="30sec">30 Second Session</button> <button id="1-min">One Minute Session</button>
+            <br> <br> <i>Stats:</i> <br>
+            Total <span id="count">0</span> <br>
+            Perfect <span id="perfect">0</span> <br>
+            Early <span id="early">0</span> <br>
+            Late <span id="late">0</span> <br>
+
+            <i>Score:</i> <br>
+            <span id="score">0</span>%
+        </p>
+            <button id="hit-button">Tap to the beat!</button>
+            <script src="metronome.js"></script>
+            <script src="main.js"></script>
+            <script src="scoredPractice.js"></script>
+            <audio src="./tap.wav" id="tap"></audio>
+            <audio src="./tone.wav" id="tone"></audio>
+    </body>
+</html>
