@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/info.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header-frame">
+            <button id="aboutBtn" class="about-btn">About</button>
+            <div class="page-counter-frame">
+                <div id="pageLabel" class="page-label">Page 1 of {{ total_pages }}</div>
+            </div>
+            <button id="closeAboutBtn" class="close-about-btn hidden">X</button>
+        </div>
+        
+        <div id="contentLabel" class="content-label">{{ pages[0] }}</div>
+        
+        <div id="navFrame" class="nav-frame">
+            <button id="prevBtn" class="nav-btn" disabled>&lt;</button>
+            <button id="nextBtn" class="nav-btn" {% if total_pages <= 1 %}disabled{% endif %}>&gt;</button>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize variables
+        let currentPage = 0;
+        let savedPage = 0;
+        let inAbout = false;
+        const totalPages = {{ total_pages }};
+        
+        // Get HTML elements
+        const aboutBtn = document.getElementById('aboutBtn');
+        const closeAboutBtn = document.getElementById('closeAboutBtn');
+        const pageLabel = document.getElementById('pageLabel');
+        const contentLabel = document.getElementById('contentLabel');
+        const navFrame = document.getElementById('navFrame');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        // Functions
+        async function loadPage(pageNum) {
+            try {
+                const response = await fetch(`/info/get_page/${pageNum}`);
+                const data = await response.json();
+                
+                contentLabel.textContent = data.content;
+                pageLabel.textContent = `Page ${data.page_num} of ${data.total_pages}`;
+                
+                currentPage = pageNum;
+                prevBtn.disabled = currentPage <= 0;
+                nextBtn.disabled = currentPage >= totalPages - 1;
+            } catch (error) {
+                console.error('Error loading page:', error);
+            }
+        }
+        
+        async function showAbout() {
+            try {
+                const response = await fetch('/info/get_about');
+                const data = await response.json();
+                
+                inAbout = true;
+                savedPage = currentPage;
+                
+                pageLabel.textContent = "About This Project";
+                contentLabel.textContent = data.content;
+                
+                closeAboutBtn.classList.remove('hidden');
+                aboutBtn.disabled = true;
+                navFrame.classList.add('hidden');
+            } catch (error) {
+                console.error('Error loading about info:', error);
+            }
+        }
+        
+        function closeAbout() {
+            inAbout = false;
+            
+            closeAboutBtn.classList.add('hidden');
+            aboutBtn.disabled = false;
+            navFrame.classList.remove('hidden');
+            
+            loadPage(savedPage);
+        }
+        
+        // Event listeners
+        aboutBtn.addEventListener('click', showAbout);
+        closeAboutBtn.addEventListener('click', closeAbout);
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages - 1) {
+                loadPage(currentPage + 1);
+            }
+        });
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 0) {
+                loadPage(currentPage - 1);
+            }
+        });
+    </script>
+</body>
+</html>
