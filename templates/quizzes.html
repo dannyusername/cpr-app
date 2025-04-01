@@ -1,0 +1,594 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPR Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f8fa;
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .intro {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        /* Question styling */
+        .question-box {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background-color: #f0f7ff;
+        }
+        
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        /* Option styling */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e8f4fd;
+        }
+        
+        .quiz-option.picked {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .quiz-option.right-answer {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .quiz-option.wrong-answer {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        /* Buttons and controls */
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .main-btn {
+            margin: 20px auto;
+            display: block;
+            min-width: 200px;
+        }
+        
+        /* Navigation dots */
+        .dot-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .dot.current {
+            background-color: #3498db;
+        }
+        
+        .dot.done {
+            background-color: #2ecc71;
+        }
+        
+        /* Results page */
+        .results {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .final-score {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .feedback-msg {
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        
+        .results-breakdown {
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .result-row {
+            margin-bottom: a5px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .result-row.right {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 3px solid #2ecc71;
+        }
+        
+        .result-row.wrong {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 3px solid #e74c3c;
+        }
+        
+        .verdict {
+            font-weight: bold;
+        }
+        
+        .right-option {
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .hide-me {
+            display: none;
+        }
+        
+        .question-num {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .quiz-length-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .length-dropdown {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .button-row {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CPR Quiz</h1>
+        
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div class="intro">
+                <p>Test your knowledge of CPR and emergency response with this quiz!</p>
+                <p>How many questions would you like to answer?</p>
+            </div>
+            
+            <div class="quiz-length-box">
+                <select id="num-questions" class="length-dropdown">
+                    <option value="5">5 Questions</option>
+                    <option value="10">10 Questions</option>
+                    <option value="15">15 Questions</option>
+                    <option value="20">20 Questions</option>
+                </select>
+            </div>
+            <button id="begin-btn" class="btn main-btn">Start Quiz</button>
+        </div>
+        
+        <!-- The actual quiz -->
+        <div id="quiz-area" class="hide-me">
+            <div class="question-num">Question <span id="q-num">1</span> of <span id="q-total">5</span></div>
+            
+            <div class="dot-nav" id="dot-nav">
+                <!-- Dots will go here -->
+            </div>
+            
+            <div id="question-box" class="question-box">
+                <div id="q-text" class="question-text"></div>
+                <div id="q-options" class="options-list"></div>
+            </div>
+            
+            <div class="button-row">
+                <button id="prev-btn" class="btn" disabled>Previous</button>
+                <button id="next-btn" class="btn">Next</button>
+            </div>
+            
+            <button id="finish-btn" class="btn main-btn hide-me">Submit Quiz</button>
+        </div>
+        
+        <!-- Results page -->
+        <div id="results-area" class="hide-me">
+            <div class="results">
+                <div class="final-score">You scored <span id="correct-count">0</span> out of <span id="question-count">0</span>!</div>
+                <div id="feedback" class="feedback-msg"></div>
+                
+                <div id="results-list" class="results-breakdown">
+                    <!-- Results go here -->
+                </div>
+                
+                <button id="retry-btn" class="btn main-btn">Try Again</button>
+                <button class="btn main-btn" onclick="window.location.href='/'">Back to Home</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables
+        let questions = [];
+        let currentQ = 0;
+        let answers = [];
+        let loading = false;
+        
+        // DOM elements - using a mix of naming styles for more human feel
+        const startScreen = document.getElementById('start-screen');
+        const quizArea = document.getElementById('quiz-area');
+        const resultsArea = document.getElementById('results-area');
+        const beginBtn = document.getElementById('begin-btn');
+        const dropdown = document.getElementById('num-questions');
+        const questionText = document.getElementById('q-text');
+        const optionsList = document.getElementById('q-options');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const finishBtn = document.getElementById('finish-btn');
+        const retryBtn = document.getElementById('retry-btn');
+        const qNum = document.getElementById('q-num');
+        const qTotal = document.getElementById('q-total');
+        const dotNav = document.getElementById('dot-nav');
+        const correctCount = document.getElementById('correct-count');
+        const questionCount = document.getElementById('question-count');
+        const feedback = document.getElementById('feedback');
+        const resultsList = document.getElementById('results-list');
+        
+        // Set up event listeners
+        beginBtn.addEventListener('click', beginQuiz);
+        prevBtn.addEventListener('click', function() { goToQuestion(currentQ - 1); });
+        nextBtn.addEventListener('click', function() { goToQuestion(currentQ + 1); });
+        finishBtn.addEventListener('click', finishQuiz);
+        retryBtn.addEventListener('click', resetQuiz);
+        
+        // Start the quiz
+        function beginQuiz() {
+            if (loading) return; // Don't let them click twice
+            
+            const numQ = parseInt(dropdown.value);
+            loading = true;
+            
+            // Change button appearance
+            beginBtn.disabled = true;
+            beginBtn.textContent = 'Getting questions...';
+            
+            // Grab questions from server
+            fetch('/quizzes/get_questions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ num_questions: numQ }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Got the questions
+                questions = data.questions;
+                answers = Array(questions.length).fill(null); // Initialize all answers as null
+                
+                // Update the UI
+                qTotal.textContent = questions.length;
+                createDots();
+                
+                // Show quiz area
+                startScreen.classList.add('hide-me');
+                quizArea.classList.remove('hide-me');
+                
+                // Show first question
+                goToQuestion(0);
+                loading = false;
+            })
+            .catch(err => {
+                console.log('Error getting questions:', err);
+                beginBtn.disabled = false;
+                beginBtn.textContent = 'Start Quiz';
+                loading = false;
+                alert('Something went wrong! Try again?');
+            });
+        }
+        
+        // Create navigation dots
+        function createDots() {
+            dotNav.innerHTML = ''; // Clear old dots if any
+            
+            // Make a dot for each question
+            for (let i = 0; i < questions.length; i++) {
+                let dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('current');
+                
+                // Let user click dots to jump to questions
+                dot.addEventListener('click', function() {
+                    goToQuestion(i);
+                });
+                
+                dotNav.appendChild(dot);
+            }
+        }
+        
+        // Show a specific question
+        function goToQuestion(idx) {
+            // Update which question we're on
+            currentQ = idx;
+            qNum.textContent = idx + 1;
+            
+            // Get this question
+            let q = questions[idx];
+            
+            // Show the question text
+            questionText.textContent = q.question;
+            
+            // Clear old options and add new ones
+            optionsList.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                let option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.textContent = opt;
+                
+                // Mark this option as selected if user picked it before
+                if (answers[idx] === i) {
+                    option.classList.add('picked');
+                }
+                
+                // Let user pick this option
+                option.addEventListener('click', function() {
+                    pickAnswer(idx, i);
+                });
+                
+                optionsList.appendChild(option);
+            });
+            
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.remove('current');
+                if (answers[i] !== null) {
+                    dot.classList.add('done');
+                }
+                if (i === idx) {
+                    dot.classList.add('current');
+                }
+            });
+            
+            // Update navigation buttons
+            updateButtons();
+        }
+        
+        // User picks an answer
+        function pickAnswer(questionIdx, answerIdx) {
+            // Save their answer
+            answers[questionIdx] = answerIdx;
+            
+            // Update the UI to show their selection
+            let options = optionsList.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.classList.remove('picked'));
+            options[answerIdx].classList.add('picked');
+            
+            // Update the navigation dot
+            document.querySelectorAll('.dot')[questionIdx].classList.add('done');
+            
+            // Maybe show the finish button
+            updateButtons();
+            
+            // Maybe auto-advance to next question (nice UX touch)
+            if (currentQ < questions.length - 1) {
+                setTimeout(() => {
+                    goToQuestion(currentQ + 1);
+                }, 700);
+            }
+        }
+        
+        // Update navigation buttons based on current state
+        function updateButtons() {
+            // Disable prev button on first question
+            prevBtn.disabled = currentQ === 0;
+            
+            // Handle next/finish buttons for last question
+            if (currentQ === questions.length - 1) {
+                nextBtn.disabled = true;
+                
+                // Show finish button if they've answered everything
+                let allAnswered = answers.every(a => a !== null);
+                if (allAnswered) {
+                    finishBtn.classList.remove('hide-me');
+                } else {
+                    finishBtn.classList.add('hide-me');
+                }
+            } else {
+                nextBtn.disabled = false;
+                finishBtn.classList.add('hide-me');
+            }
+        }
+        
+        // Finish the quiz and see results
+        function finishQuiz() {
+            // Make sure they answered everything
+            let missing = answers.includes(null);
+            if (missing) {
+                alert("You haven't answered all questions yet!");
+                return;
+            }
+            
+            // Show loading state
+            finishBtn.disabled = true;
+            finishBtn.textContent = 'Checking answers...';
+            
+            // Send to server to check answers
+            fetch('/quizzes/check_answers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ answers: answers }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Show results
+                showResults(data);
+                
+                // Switch to results screen
+                quizArea.classList.add('hide-me');
+                resultsArea.classList.remove('hide-me');
+            })
+            .catch(err => {
+                console.log('Error checking answers:', err);
+                finishBtn.disabled = false;
+                finishBtn.textContent = 'Submit Quiz';
+                alert('Something went wrong! Try again?');
+            });
+        }
+        
+        // Show quiz results
+        function showResults(data) {
+            // Update score
+            correctCount.textContent = data.score;
+            questionCount.textContent = data.total;
+            
+            // Show feedback message
+            feedback.textContent = data.feedback;
+            
+            // Reset results list
+            resultsList.innerHTML = '';
+            
+            // Add each question result
+            data.results.forEach((result, i) => {
+                let resultRow = document.createElement('div');
+                resultRow.className = result.is_correct ? 'result-row right' : 'result-row wrong';
+                
+                // Add question text
+                let qText = document.createElement('div');
+                qText.textContent = `Q${i+1}: ${questions[i].question}`;
+                resultRow.appendChild(qText);
+                
+                // Add correct/wrong indicator
+                let verdict = document.createElement('div');
+                verdict.className = 'verdict';
+                verdict.textContent = result.is_correct ? '✓ Correct!' : '✗ Incorrect';
+                verdict.style.color = result.is_correct ? '#2ecc71' : '#e74c3c';
+                resultRow.appendChild(verdict);
+                
+                // If wrong, show the correct answer
+                if (!result.is_correct) {
+                    let rightAnswer = document.createElement('div');
+                    rightAnswer.className = 'right-option';
+                    rightAnswer.textContent = `The correct answer is: ${result.correct_answer}`;
+                    resultRow.appendChild(rightAnswer);
+                }
+                
+                resultsList.appendChild(resultRow);
+            });
+        }
+        
+        // Reset everything to try again
+        function resetQuiz() {
+            // Reset state
+            questions = [];
+            currentQ = 0;
+            answers = [];
+            loading = false;
+            
+            // Reset buttons
+            finishBtn.disabled = false;
+            finishBtn.textContent = 'Submit Quiz';
+            beginBtn.disabled = false;
+            beginBtn.textContent = 'Start Quiz';
+            
+            // Reset UI
+            resultsArea.classList.add('hide-me');
+            quizArea.classList.add('hide-me');
+            startScreen.classList.remove('hide-me');
+        }
+        
+        // Add error handling for bad request errors
+        window.addEventListener('error', function(e) {
+            if (!loading) return;
+            loading = false;
+            beginBtn.disabled = false;
+            beginBtn.textContent = 'Start Quiz';
+            alert('Sorry, something went wrong. Please try again later.');
+        });
+    </script>
+</body>
+</html>

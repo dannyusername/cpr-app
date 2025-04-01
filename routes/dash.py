@@ -6,6 +6,6 @@ import bcrypt
 dash = Blueprint('dash', __name__)
 
 # Home route (protected content)
-@dash.route('/home', methods=['GET', 'POST'])
+@dash.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('home.html')
