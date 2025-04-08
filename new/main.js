@@ -1,19 +1,20 @@
-const hitButton = document.getElementById('hit-button');
 const playButton = document.getElementById('play-button');
 const soundChoice = document.getElementById('choice');
 const choiSpan = document.getElementById('stype');
 
 let met = new Metronome();
+let taOrTo = 0;
 
 playButton.addEventListener('click', function() {
     met.startStop();
 });
 
 soundChoice.addEventListener('click',function() {
-    if (chooseSound() == 0) {
-        choiSpan = 'Tap';
+    met.chooseSound();
+    if (met.soundChoice == 0) {
+        choiSpan.textContent = "Tap";
     }
     else {
-        choiSpan = 'Tone';
+        choiSpan.textContent = "Tone";
     }
 })
