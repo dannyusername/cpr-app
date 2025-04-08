@@ -30,13 +30,12 @@ class Metronome {
     scheduleNote(time) {
         this.notesInQueue.push({time: time});
 
-        const tapper = this.audcont.createMediaElementSource(document.getElementById('tap'));
-        const toner = this.audcont.createMediaElementSource(document.getElementById('tone'));
-        
         const envelope = this.audcont.createGain();
         envelope.gain.value = 1;
 
         if (this.soundChoice == 0) {
+            const tapper = this.audcont.createMediaElementSource(document.getElementById('tap'));
+
             tapper.connect(envelope);
             envelope.connect(this.audcont.destination);
 
@@ -44,6 +43,8 @@ class Metronome {
             tapper.stop(time + 0.03);
         }
         else {
+            const toner = this.audcont.createMediaElementSource(document.getElementById('tone'));
+
             toner.connect(envelope);
             envelope.connect(this.audcont.destination);
             
@@ -63,8 +64,9 @@ class Metronome {
         if (this.isRunning) {
             return;
         }
+
         if (this.audcont == null) {
-            this.audcont = new (window.AudioContext || window.webkitAudioContect)();
+            this.audcont = new (window.AudioContext || window.webkitAudioContext)();
         }
     
         this.isRunning = true;
